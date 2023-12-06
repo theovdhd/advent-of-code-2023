@@ -4,8 +4,6 @@ f = open('input.txt', 'r')
 
 sum = 0
 for line in f.readlines():
-    print('-------------------')
-    print(line)
     indexes = {}
     for number in numbers:
         if number in line:
@@ -15,6 +13,5 @@ for line in f.readlines():
             indexes[i] = int(line[i])
     indexes = dict(sorted(indexes.items()))
     calibration_value = int(list(indexes.values())[0]) * 10 + int(list(indexes.values())[-1])
-    print(calibration_value)
     sum += calibration_value
 print(sum)
