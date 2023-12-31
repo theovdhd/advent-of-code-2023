@@ -14,9 +14,16 @@ class Symbol:
         self.value = value
         self.line = line
         self.pos = pos
+        self.first_number = None
+        self.second_number = None
+        self.adjacent = 0
+        self.gear_ratio = None
 
     def print(self):
         print(self.value + " at " + str(self.line) + " at " + str(self.pos))
+
+    def adj(self):
+        self.adjacent += 1
 
 f = open('input.txt', 'r').read().splitlines()
 line_number = 0
@@ -45,7 +52,6 @@ for line_number, line in enumerate(f):
                     # we need to create a number object
                     number = Number(line[start:end+1], line_number, start, end)
                     numbers.append(number)
-                    print(number.value)
                     start = None
                 # we're still scanning
                 # CONTINUE SCAN
@@ -69,8 +75,17 @@ for number in numbers:
     for symbol in symbols:
         if symbol.line >= number.line - 1 and symbol.line <= number.line + 1:
             if symbol.pos >= number.start - 1 and symbol.pos <= number.end:
-                print("Symbol " + symbol.value + " is in number " + number.value + " at line " + str(number.line) + " from " + str(number.start) + " to " + str(number.end))
                 number.part = True
-    if number.part:
-        sum += int(number.value)
+                if symbol.first_number == None:
+                    symbol.first_number = number.value
+                else:
+                    if symbol.second_number == None:
+                        symbol.second_number = number.value
+                symbol.adj()
+sum = 0
+for symbol in symbols:
+    if symbol.adjacent == 2:
+        symbol.gear_ratio = int(symbol.first_number) * int(symbol.second_number)
+        sum += symbol.gear_ratio
+
 print(sum)
